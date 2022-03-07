@@ -67,9 +67,18 @@ public class SearchPanel extends JPanel{
                     "WHERE attack=? and defence = ?;";
 
             try {
+                if(defenceSearchField.getText().equals("")){
+                    sql = "INSERT INTO search_table (armor_id, weapon_id, item_name, attack, defence)\n" +
+                            "SELECT 0, weapon_id, item_name, attack, defence\n" +
+                            "FROM weapons_trader\n" +
+                            "WHERE attack=?;";
+                }
+
                 state = conn.prepareStatement(sql);
                 state.setInt(1, parseInt(attackSearchField.getText()));
-                state.setInt(2, parseInt(defenceSearchField.getText()));
+                if(!defenceSearchField.getText().equals("")){
+                    state.setInt(2, parseInt(defenceSearchField.getText()));
+                }
                 state.execute();
 
             } catch (SQLException e1) {
@@ -87,9 +96,17 @@ public class SearchPanel extends JPanel{
                     "WHERE defence=? and attack = ?;";
 
             try {
+                if(attackSearchField.getText().equals("")){
+                    sql = "INSERT INTO search_table (armor_id, weapon_id, item_name, attack, defence)\n" +
+                            "SELECT armor_id, 0, item_name, attack, defence\n" +
+                            "FROM armor_trader\n" +
+                            "WHERE defence=?;";
+                }
                 state = conn.prepareStatement(sql);
                 state.setInt(1, parseInt(defenceSearchField.getText()));
-                state.setInt(2, parseInt(attackSearchField.getText()));
+                if(!attackSearchField.getText().equals("")){
+                    state.setInt(2, parseInt(attackSearchField.getText()));
+                }
                 state.execute();
 
             } catch (SQLException e1) {
